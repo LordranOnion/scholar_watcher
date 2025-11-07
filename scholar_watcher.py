@@ -21,7 +21,7 @@ RSS_LIMIT=100
 2) Install deps:
    python -m venv .venv
    source .venv/bin/activate   # Windows: .venv\Scripts\activate
-   pip install fastapi uvicorn[standard] requests python-dotenv apscheduler sqlite-utils pydantic
+   pip install fastapi uvicorn[standard] requests python-dotenv apscheduler sqlite-utils pydantic scholarly
 
 3) Run:
    uvicorn scholar_discord_watcher:app --host 0.0.0.0 --port 8080
@@ -60,7 +60,16 @@ SCHEDULE_MINUTES = int(os.getenv("SCHEDULE_MINUTES", "15"))
 PER_KEYWORD_LIMIT = int(os.getenv("PER_KEYWORD_LIMIT", "10"))
 RSS_LIMIT = int(os.getenv("RSS_LIMIT", "100"))
 
+KEYWORDS_ENV_LOCK = os.getenv("KEYWORDS_ENV_LOCK", "false").lower() in {"1","true","yes"}
+
 DB_PATH = os.getenv("DB_PATH", "rssscholar.db")
+
+KEYWORDS = os.getenv("KEYWORDS", "")
+if KEYWORDS:
+    DEFAULT_KEYWORDS = [kw.strip() for kw in KEYWORDS.split(",") if kw.strip()]
+else:
+    DEFAULT_KEYWORDS = []
+
 USER_AGENT = (
     "ScholarWatcher/1.0 (+https://github.com/) Python-requests"
 )
@@ -451,11 +460,26 @@ def rss(kw: Optional[str] = None, limit: int = RSS_LIMIT):
 @app.on_event("startup")
 def on_startup():
     init_db()
+    # If KEYWORDS are defined in .env, insert them automatically (once)
+    if DEFAULT_KEYWORDS:
+        with db() as conn:
+            for kw in DEFAULT_KEYWORDS:
+                try:
+                    conn.execute(
+                        "INSERT INTO keywords (term, created_at) VALUES (?, ?)",
+                        (kw, datetime.now(timezone.utc).isoformat()),
+                    )
+                except sqlite3.IntegrityError:
+                    # already exists
+                    pass
+
     # Run once at startup
     scheduler.add_job(run_cycle, "date", run_date=datetime.now())
-    # Then schedule
+    # Then schedule future runs
     if SCHEDULE_MINUTES > 0:
-        scheduler.add_job(run_cycle, "interval", minutes=SCHEDULE_MINUTES, id="cycle", replace_existing=True)
+        scheduler.add_job(
+            run_cycle, "interval", minutes=SCHEDULE_MINUTES, id="cycle", replace_existing=True
+        )
     scheduler.start()
 
 

@@ -240,22 +240,22 @@ HTML_PAGE = """
   <title>Scholar RSS → Discord | Options</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 24px; }
-    .card { max-width: 980px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    h1 { margin-top: 0; }
-    form { display: flex; gap: 8px; margin: 16px 0; }
-    input[type=text] { flex: 1; padding: 10px 12px; border: 1px solid #ccc; border-radius: 10px; }
-    button { padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer; }
-    .add { background: #111; color: #fff; }
-    .del { background: #c62828; color: #fff; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
-    .muted { color: #666; font-size: 14px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .cfg { background: #fafafa; padding: 12px; border: 1px dashed #ddd; border-radius: 10px; }
-    .badge { display: inline-block; padding: 4px 8px; border-radius: 999px; background: #eef; color: #224; font-size: 12px; }
-    .right { text-align: right; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    body {{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 24px; }}
+    .card {{ max-width: 980px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }}
+    h1 {{ margin-top: 0; }}
+    form {{ display: flex; gap: 8px; margin: 16px 0; }}
+    input[type=text] {{ flex: 1; padding: 10px 12px; border: 1px solid #ccc; border-radius: 10px; }}
+    button {{ padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer; }}
+    .add {{ background: #111; color: #fff; }}
+    .del {{ background: #c62828; color: #fff; }}
+    table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
+    th, td {{ padding: 10px; border-bottom: 1px solid #eee; text-align: left; }}
+    .muted {{ color: #666; font-size: 14px; }}
+    .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+    .cfg {{ background: #fafafa; padding: 12px; border: 1px dashed #ddd; border-radius: 10px; }}
+    .badge {{ display: inline-block; padding: 4px 8px; border-radius: 999px; background: #eef; color: #224; font-size: 12px; }}
+    .right {{ text-align: right; }}
+    .mono {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
   </style>
 </head>
 <body>
@@ -301,7 +301,6 @@ HTML_PAGE = """
 </body>
 </html>
 """
-
 
 def ok_bad(flag: bool) -> str:
     return f"<b style='color:{'green' if flag else 'crimson'}'>{'OK' if flag else 'Missing'}</b>"
